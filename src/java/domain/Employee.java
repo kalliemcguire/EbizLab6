@@ -11,8 +11,11 @@ import javax.persistence.*;
 
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "Employee_Type", discriminatorType = DiscriminatorType.INTEGER)
 public abstract class Employee implements Serializable{
+    private static final int HOURLY = 1, SALARY = 2;
+    
     @Id
     @Column(name = "Employee_ID")
     private int employeeID;
@@ -49,10 +52,6 @@ public abstract class Employee implements Serializable{
     public int getEmployeeID() {
         return employeeID;
     }
-
-    public int getEmployeeType() {
-        return employeeType;
-    }
     
     public static ArrayList<Employee> getEmployees() {
         return EmployeeDA.getEmployees();
@@ -76,10 +75,6 @@ public abstract class Employee implements Serializable{
 
     public String getUserID() {
         return userID;
-    }
-    
-    public void setEmployeeID(int employeeID) {
-        this.employeeID = employeeID;
     }
 
     public void setEmployeeType(int employeeType) {

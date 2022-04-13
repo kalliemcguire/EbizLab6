@@ -28,43 +28,6 @@ public class TimecardDA {
     }
     
     public static void initialize(){
-        Calendar calendar = Calendar.getInstance();
-        Timecard t;
-        Date date = new Date();
-        
-        calendar.set(2022, 1, 6);
-        date = calendar.getTime();
-        
-        t = new Timecard();
-        t.setDate(date);
-        t.setEmployeeID(1002);
-        t.setHoursWorked(40);
-        t.setOvertimeHours(10);
-        t.add();
-       
-        t = new Timecard();
-        t.setDate(date);
-        t.setEmployeeID(1004);
-        t.setHoursWorked(40);
-        t.setOvertimeHours(12.5);
-        t.add();
-        
-        calendar.set(2022, 1, 7);
-        date = calendar.getTime();
-        
-        t = new Timecard();
-        t.setDate(date);
-        t.setEmployeeID(1002);
-        t.setHoursWorked(30);
-        t.setOvertimeHours(5);
-        t.add();
-        
-        t = new Timecard();
-        t.setDate(date);
-        t.setEmployeeID(1004);
-        t.setHoursWorked(40);
-        t.setOvertimeHours(5);
-        t.add();
     }
 
     public static ArrayList<Timecard> getEmployeeTimecards(int ID) {

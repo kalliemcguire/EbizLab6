@@ -7,10 +7,9 @@ import javax.persistence.*;
 
 @Entity
 @DiscriminatorValue("1")
+@Table(name = "Hourly_Employee")
 public class HourlyEmployee extends Employee{
     @Id
-    @Column(name = "Employee_ID")
-    private int employeeID;
     @Column(name = "Hourly_Rate")
     private double hourlyRate;
     @Column(name = "Overtime_Rate")

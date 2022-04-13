@@ -1,11 +1,15 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
 @Entity
 @DiscriminatorValue("2")
-public class SalaryEmployee extends Employee{
+@Table(name = "Salary_Employee")
+public class SalaryEmployee extends Employee implements Serializable{
+    @Id
+    @Column(name = "Salary")
     private double salary;
     
     public double calculateGrossPay(Date date) {
