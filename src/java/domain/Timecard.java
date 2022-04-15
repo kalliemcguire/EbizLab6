@@ -11,9 +11,11 @@ import javax.persistence.*;
 @Entity
 public class Timecard implements Serializable{
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Timecard_ID")
     private int timecardID;
     @Column(name = "Timecard_Date")
+    //may not need temporal annotation
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     @Column(name = "Employee_ID")

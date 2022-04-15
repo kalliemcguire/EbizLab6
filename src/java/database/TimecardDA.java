@@ -5,6 +5,9 @@ import domain.Timecard;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 public class TimecardDA {
     private static ArrayList<Timecard> timecards = new ArrayList<Timecard>(5);
@@ -30,14 +33,26 @@ public class TimecardDA {
     public static void initialize(){
     }
 
-    public static ArrayList<Timecard> getEmployeeTimecards(int ID) {
+    public static ArrayList<Timecard> getEmployeeTimecards(int userID) {
         employeeTimecards.clear();
                 
-        for (int i = 0; i < timecards.size(); i++)
-            if (timecards.get(i).getEmployeeID() == ID)
-                employeeTimecards.add(timecards.get(i));
-        
-        return employeeTimecards;
+        EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
+		String qString = "SELECT tc FROM Timecard tc" +
+                       " WHERE tc.employeeID = :id";
+                //employeeID is an attribute name even though it is in a query
+		TypedQuery<Timecard> q = em.createQuery(qString, Timecard.class);
+                q.setParameter("id", userID);
+	
+                //list is superclass for arraylist
+		List<Timecard> tCards;
+		try{
+                        //returns list object, then create arraylist and pass it the list object
+			tCards = q.getResultList();
+			employeeTimecards = new ArrayList(tCards);
+		}
+		finally {em.close();}
+
+		return employeeTimecards;
     }
     
     public static ArrayList<Timecard> getEmployeeTimecards(int ID, Date begDate, Date endDate) {

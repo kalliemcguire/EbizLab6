@@ -15,7 +15,7 @@ public class PayrollSystem {
     public static void initialize() {
         
         if (!isInitialized)
-            PayrollSystemDA.initialize();
+            PayrollSystemDA.getEmFactory();
         isInitialized = true;
     }
     
