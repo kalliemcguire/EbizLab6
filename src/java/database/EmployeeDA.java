@@ -1,8 +1,6 @@
 package database;
 
 import domain.Employee;
-import domain.HourlyEmployee;
-import domain.SalaryEmployee;
 import exceptions.RecordNotFoundException;
 import javax.persistence.*;
 

@@ -8,12 +8,24 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import java.util.Date;
+import javax.persistence.*;
 
+@Entity
 public class Payroll implements Serializable{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Payroll_ID")
+    private int payrollID;
+    @Column(name = "Payroll_Date")
+    @Temporal(TemporalType.DATE)
     private Date date;
+    @Column(name = "Employee_ID")
     private int employeeID;
+    @Column(name = "Gross_Pay")
     private double grossPay;
+    @Column(name = "Total_Deductions")
     private double totalDeductions;
+    @Column(name = "Net_Pay")
     private double netPay;
     
     public Payroll(){}
@@ -85,6 +97,10 @@ public class Payroll implements Serializable{
         return currency.format(netPay);
     }
     
+    public int getPayrollID() {
+        return payrollID;
+    }
+    
     public static ArrayList<Payroll> getPayrollRecords() {
         return PayrollDA.getPayrollRecords();
     }
@@ -112,6 +128,10 @@ public class Payroll implements Serializable{
 
     public void setNetPay(double netPay) {
         this.netPay = netPay;
+    }
+
+    public void setPayrollID(int payrollID) {
+        this.payrollID = payrollID;
     }
 
     public void setTotalDeductions(double totalDeductions) {

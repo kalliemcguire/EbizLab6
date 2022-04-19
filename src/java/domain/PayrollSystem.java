@@ -1,13 +1,8 @@
 package domain;
 
 import database.PayrollSystemDA;
-import domain.Payroll;
 import exceptions.LoginException;
 import exceptions.RecordNotFoundException;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class PayrollSystem {
     private static boolean isInitialized = false;

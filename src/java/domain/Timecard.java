@@ -11,12 +11,13 @@ import javax.persistence.*;
 @Entity
 public class Timecard implements Serializable{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //changing generationtype from auto to identity fixed the error i was getting
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Timecard_ID")
     private int timecardID;
     @Column(name = "Timecard_Date")
     //may not need temporal annotation
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date date;
     @Column(name = "Employee_ID")
     private int employeeID;

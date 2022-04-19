@@ -19,4 +19,8 @@ private static final EntityManagerFactory emf = Persistence.createEntityManagerF
     public static EntityManagerFactory getEmFactory() {
         return emf;
     }
+    
+    public static void terminate() {
+        emf.close();
+    }
 }

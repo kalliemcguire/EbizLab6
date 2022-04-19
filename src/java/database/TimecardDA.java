@@ -3,31 +3,47 @@ package database;
 import domain.Timecard;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 
 public class TimecardDA {
-    private static ArrayList<Timecard> timecards = new ArrayList<Timecard>(5);
     private static ArrayList<Timecard> employeeTimecards = new ArrayList<Timecard>();
     
     public static void add(Timecard tc) {
-        tc.setTimecardID(timecards.size());
-        timecards.add(tc);
+        EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
+        EntityTransaction transact = em.getTransaction();
+        try {
+            transact.begin();
+            em.persist(tc);
+            System.out.println("Timecard to add " + tc);
+            transact.commit();
+        } finally {
+            em.close();
+        }
     }
     
-    public static void delete(Timecard t){
-        timecards.remove(t);
+    public static void delete(Timecard tc){
+        EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
+        EntityTransaction transact = em.getTransaction();
+        try {
+            transact.begin();
+            em.remove(em.merge(tc));
+            System.out.println("Timecard to delete " + tc);
+            transact.commit();
+        } finally {
+            em.close();
+        }
     }
     
     public static Timecard find(int id){
-        Timecard timecard= null;
-        for(int i = 0; i<timecards.size(); i++)
-            if(timecards.get(i).getTimecardID() == id)
-                return timecards.get(i);
-        return timecard;
+        Timecard tc;
+        EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
+        try {
+            tc = em.find(Timecard.class, id);
+            return tc;
+        }
+        finally {em.close();}
     }
     
     public static void initialize(){
@@ -57,16 +73,9 @@ public class TimecardDA {
     
     public static ArrayList<Timecard> getEmployeeTimecards(int ID, Date begDate, Date endDate) {
         employeeTimecards.clear();
-        Timecard timecard = null;
-                
-        for (int i = 0; i < timecards.size(); i++){
-            timecard = timecards.get(i);
-
-            if (timecard.getEmployeeID() == ID){
-                if(timecard.getDate().compareTo(begDate) >= 0 && timecard.getDate().compareTo(endDate) <= 0)
-                    employeeTimecards.add(timecard);
-            }
-        }
+        EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
+        String qString = "SELECT tc FROM Timecard tc" +
+                " WHERE tc.timecardID = :ID";
         
         return employeeTimecards;
     }
