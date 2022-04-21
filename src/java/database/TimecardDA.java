@@ -53,37 +53,55 @@ public class TimecardDA {
         employeeTimecards.clear();
                 
         EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
-		String qString = "SELECT tc FROM Timecard tc" +
+	String qString = "SELECT tc FROM Timecard tc" +
                        " WHERE tc.employeeID = :id";
-                //employeeID is an attribute name even though it is in a query
-		TypedQuery<Timecard> q = em.createQuery(qString, Timecard.class);
-                q.setParameter("id", userID);
+        //employeeID is an attribute name even though it is in a query
+	TypedQuery<Timecard> q = em.createQuery(qString, Timecard.class);
+        q.setParameter("id", userID);
 	
-                //list is superclass for arraylist
-		List<Timecard> tCards;
-		try{
-                        //returns list object, then create arraylist and pass it the list object
-			tCards = q.getResultList();
-			employeeTimecards = new ArrayList(tCards);
-		}
-		finally {em.close();}
+        //list is superclass for arraylist
+	List<Timecard> tCards;
+        try{
+        //returns list object, then create arraylist and pass it the list object
+            tCards = q.getResultList();
+            employeeTimecards = new ArrayList(tCards);
+        } finally {
+            em.close();
+        }
 
-		return employeeTimecards;
+    return employeeTimecards;
     }
     
     public static ArrayList<Timecard> getEmployeeTimecards(int ID, Date begDate, Date endDate) {
         employeeTimecards.clear();
+        
         EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
         String qString = "SELECT tc FROM Timecard tc" +
                 " WHERE tc.timecardID = :ID";
+        TypedQuery<Timecard> q = em.createQuery(qString, Timecard.class);
+        q.setParameter("ID", ID);
+        
+        List<Timecard> tCards;
+        try {
+            tCards = q.getResultList();
+            employeeTimecards = new ArrayList(tCards);
+        } finally {
+            em.close();
+        }
         
         return employeeTimecards;
     }
     
     public static void update(Timecard tc) {
-        Timecard timecard = find(tc.getTimecardID());
-        timecard.setDate(tc.getDate());
-        timecard.setHoursWorked(tc.getHoursWorked());
-        timecard.setOvertimeHours(tc.getOvertimeHours());
+        EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
+        EntityTransaction transact = em.getTransaction();
+        try {
+            transact.begin();
+            em.merge(tc);
+            System.out.println("Timecard to update " + tc);
+            transact.commit();
+        } finally {
+            em.close();
+        }
     }
 }

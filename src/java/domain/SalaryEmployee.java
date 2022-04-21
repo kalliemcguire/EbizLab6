@@ -8,7 +8,6 @@ import javax.persistence.*;
 @DiscriminatorValue("2")
 @Table(name = "Salary_Employee")
 public class SalaryEmployee extends Employee implements Serializable{
-    @Id
     @Column(name = "Salary")
     private double salary;
     

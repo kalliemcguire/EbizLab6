@@ -1,13 +1,11 @@
 package domain;
 
 import database.PayrollDA;
+import database.PayrollSystemDA;
+
 import java.io.Serializable;
-import java.text.DateFormat;
-
-import java.text.NumberFormat;
-import java.util.ArrayList;
-
-import java.util.Date;
+import java.text.*;
+import java.util.*;
 import javax.persistence.*;
 
 @Entity
@@ -30,8 +28,17 @@ public class Payroll implements Serializable{
     
     public Payroll(){}
     
-    public void add() {
-        PayrollDA.add(this);
+    public void add(Payroll p) {
+        EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
+        EntityTransaction transact = em.getTransaction();
+        try {
+            transact.begin();
+            em.persist(p);
+            System.out.println("Payroll record to add " + p);
+            transact.commit();
+        } finally {
+            em.close();
+        }
     }
     
     public static void calculatePayroll(Date date) {
@@ -62,7 +69,7 @@ public class Payroll implements Serializable{
             payroll.setGrossPay(grossPay);
             payroll.setTotalDeductions(totalDeductions);
             payroll.setNetPay(netPay);
-            payroll.add();
+            payroll.add(payroll);
         }
     }
 
@@ -101,8 +108,8 @@ public class Payroll implements Serializable{
         return payrollID;
     }
     
-    public static ArrayList<Payroll> getPayrollRecords() {
-        return PayrollDA.getPayrollRecords();
+    public static ArrayList<Payroll> getPayrollRecords(int employeeID, Date date) {
+        return PayrollDA.getPayrollRecords(employeeID, date);
     }
 
     public double getTotalDeductions() {

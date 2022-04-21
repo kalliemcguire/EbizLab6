@@ -4,21 +4,59 @@ import domain.Employee;
 import exceptions.RecordNotFoundException;
 import javax.persistence.*;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class EmployeeDA {
     
-    private static ArrayList<Employee> employees = new ArrayList<Employee>(5);
+    private static ArrayList<Employee> employees = new ArrayList<Employee>();
     
     public static void add(Employee emp) {
-        employees.add(emp);
+    EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
+        EntityTransaction transact = em.getTransaction();
+        try {
+            transact.begin();
+            em.persist(emp);
+            System.out.println("Employee to add " + emp);
+            transact.commit();
+        } finally {
+            em.close();
+        }
     }
     
     public static Employee find(int ID){
-        for (int i = 0; i < employees.size(); i++)
-            if (employees.get(i).getEmployeeID() == ID)
-                return employees.get(i);
-        return null;
+        Employee emp;
+        EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
+        try {
+            emp = em.find(Employee.class, ID);
+            return emp;
+        }
+        finally {em.close();}
+    }
+    
+    public static void update(Employee emp){
+        EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
+        EntityTransaction transact = em.getTransaction();
+        try {
+            transact.begin();
+            em.merge(emp);
+            System.out.println("Employee to update " + emp);
+            transact.commit();
+        } finally {
+            em.close();
+        }
+    }
+    
+    public static void delete(Employee emp){
+        EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
+        EntityTransaction transact = em.getTransaction();
+        try {
+            transact.begin();
+            em.remove(em.merge(emp));
+            System.out.println("Employee to delete " + emp);
+            transact.commit();
+        } finally {
+            em.close();
+        }
     }
     
     public static Employee findByUserID(String userID) throws RecordNotFoundException{
@@ -50,7 +88,22 @@ public class EmployeeDA {
     }
 
     public static ArrayList<Employee> getEmployees() {
-        return employees;
+        employees.clear();
+                
+        EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
+	String qString = "SELECT e FROM Employee e";
+
+	TypedQuery<Employee> q = em.createQuery(qString, Employee.class);
+	
+	List<Employee> emps;
+            try{
+		emps = q.getResultList();
+		employees = new ArrayList(emps);
+		} finally {
+                    em.close();
+                }
+        System.out.println("employees ArrayList from EmployeeDA.getEmployees() " + employees);
+	return employees;
     }
     
 }

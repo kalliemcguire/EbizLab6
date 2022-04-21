@@ -1,22 +1,19 @@
 package domain;
 
 import database.TimecardDA;
+
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.text.*;
+import java.util.*;
 import javax.persistence.*;
 
 @Entity
 public class Timecard implements Serializable{
     @Id
-    //changing generationtype from auto to identity fixed the error i was getting
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Timecard_ID")
     private int timecardID;
     @Column(name = "Timecard_Date")
-    //may not need temporal annotation
     @Temporal(TemporalType.DATE)
     private Date date;
     @Column(name = "Employee_ID")

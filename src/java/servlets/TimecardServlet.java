@@ -1,15 +1,11 @@
 package servlets;
 
-import database.PayrollSystemDA;
-import domain.PayrollSystem;
-import domain.Employee;
-import domain.Timecard;
+import database.PayrollDA;
+import domain.*;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.text.DateFormat;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -111,6 +107,26 @@ public class TimecardServlet extends HttpServlet {
             Timecard timecard = Timecard.find(id);
             session.setAttribute("timecard", timecard);
             url = "/timecard.jsp";
+        }
+        
+        if (option.equals("payroll")){
+            Employee employee = (Employee)session.getAttribute("employee");
+            id = employee.getEmployeeID();
+            System.out.println(id);
+            
+            String dateString = "04/15/2022";
+            System.out.println("dateString " + dateString);
+            Date date = new Date();
+            try {
+                date = dateFormatShort.parse(dateString);
+                System.out.println("parsed dateString " + date);
+            } catch(Exception e) {
+                System.out.println(e.getMessage());
+            }
+            Payroll.calculatePayroll(date);
+            ArrayList<Payroll> payrollRecords = PayrollDA.getPayrollRecords(id, date);
+            session.setAttribute("payrollRecords", payrollRecords);
+            url = "/payroll.jsp";
         }
         
         getServletContext()

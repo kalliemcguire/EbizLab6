@@ -1,8 +1,8 @@
 package domain;
 
 import database.WithholdingTypeDA;
-import java.io.Serializable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.persistence.*;
 
