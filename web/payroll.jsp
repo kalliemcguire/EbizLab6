@@ -7,10 +7,11 @@
         <link rel="stylesheet" href="styles/main.css" type="text/css"/>    
     </head>
         <body>
-        <h1>Your Payroll Records</h1>
+        <h1>Payroll Records</h1>
         <table>
             <tr>
                 <th>Date</th>
+                <th>Employee ID</th>
                 <th>Gross Pay</th>
                 <th>Deductions</th>
                 <th>Net Pay</th>
@@ -18,6 +19,7 @@
             <c:forEach var="record" items="${payrollRecords}">
                 <tr>
                     <td><c:out value='${record.dateFormatted}'/></td>
+                    <td class="right"><c:out value='${record.employeeID}'/></td>
                     <td class="right"><c:out value='${record.grossPayFormatted}'/></td>
                     <td class="right"><c:out value='${record.totalDeductionsFormatted}'/></td>
                     <td class="right"><c:out value='${record.netPayFormatted}'/></td>

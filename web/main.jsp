@@ -19,6 +19,7 @@
         <br>
         <form action="timecard" method="post">
             <label>Calculate Payroll</label>
+            <input type="text" name="prDate" value="${prDate}"required>
             <input type="hidden" name="option" value="payroll">
             <input type="submit" value="Select">
         </form>

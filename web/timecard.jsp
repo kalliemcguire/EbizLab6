@@ -10,7 +10,7 @@
     <body>
         <h1>Update Timecard Values</h1>
         <p><i>${message}</i></p>
-        <form action="timecard" mehtod="post">
+        <form action="timecard" method="post">
             <input type="hidden" name="option" value="save">
             <label class="pad_top">Date</label>
             <input type="text" name="date" value="${timecard.dateShort}" required>

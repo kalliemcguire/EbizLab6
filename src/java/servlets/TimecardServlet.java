@@ -110,11 +110,7 @@ public class TimecardServlet extends HttpServlet {
         }
         
         if (option.equals("payroll")){
-            Employee employee = (Employee)session.getAttribute("employee");
-            id = employee.getEmployeeID();
-            System.out.println(id);
-            
-            String dateString = "04/15/2022";
+            String dateString = request.getParameter("prDate");
             System.out.println("dateString " + dateString);
             Date date = new Date();
             try {
@@ -124,7 +120,7 @@ public class TimecardServlet extends HttpServlet {
                 System.out.println(e.getMessage());
             }
             Payroll.calculatePayroll(date);
-            ArrayList<Payroll> payrollRecords = PayrollDA.getPayrollRecords(id, date);
+            ArrayList<Payroll> payrollRecords = PayrollDA.getPayrollRecords(date);
             session.setAttribute("payrollRecords", payrollRecords);
             url = "/payroll.jsp";
         }

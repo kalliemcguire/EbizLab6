@@ -20,17 +20,15 @@ public class PayrollDA {
             em.close();
         }
     }
-    //method should take userID and date as arguments, display payroll records for that employee on that date
-    public static ArrayList<Payroll> getPayrollRecords(int employeeID, Date date) {
+
+    public static ArrayList<Payroll> getPayrollRecords(Date date) {
         payrollRecords.clear();
                 
         EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
 		String qString = "SELECT pr FROM Payroll pr" +
-                       " WHERE pr.employeeID = :empID AND" +
-                       " pr.date = :date";
+                       " WHERE pr.date = :date";
 
 		TypedQuery<Payroll> q = em.createQuery(qString, Payroll.class);
-                q.setParameter("empID", employeeID);
                 q.setParameter("date", date);
 	
 		List<Payroll> pRoll;

@@ -108,8 +108,8 @@ public class Payroll implements Serializable{
         return payrollID;
     }
     
-    public static ArrayList<Payroll> getPayrollRecords(int employeeID, Date date) {
-        return PayrollDA.getPayrollRecords(employeeID, date);
+    public static ArrayList<Payroll> getPayrollRecords(Date date) {
+        return PayrollDA.getPayrollRecords(date);
     }
 
     public double getTotalDeductions() {
