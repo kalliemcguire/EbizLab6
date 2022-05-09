@@ -67,6 +67,10 @@ public class Timecard implements Serializable{
         return TimecardDA.getEmployeeTimecards(ID, begDate, endDate);
     }
     
+    public static ArrayList<Timecard> getAllTimecards() {
+        return TimecardDA.getAllTimecards();
+    }
+    
     public double getHoursWorked() {
         return hoursWorked;
     }

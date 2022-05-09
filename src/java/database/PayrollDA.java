@@ -25,19 +25,37 @@ public class PayrollDA {
         payrollRecords.clear();
                 
         EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
-		String qString = "SELECT pr FROM Payroll pr" +
+	String qString = "SELECT pr FROM Payroll pr" +
                        " WHERE pr.date = :date";
 
-		TypedQuery<Payroll> q = em.createQuery(qString, Payroll.class);
-                q.setParameter("date", date);
+	TypedQuery<Payroll> q = em.createQuery(qString, Payroll.class);
+        q.setParameter("date", date);
 	
-		List<Payroll> pRoll;
-		try{
-			pRoll = q.getResultList();
-			payrollRecords = new ArrayList(pRoll);
-		}
-		finally {em.close();}
+	List<Payroll> pRoll;
+	try{
+            pRoll = q.getResultList();
+            payrollRecords = new ArrayList(pRoll);
+	} finally {em.close();}
 
-		return payrollRecords;
+	return payrollRecords;
+    }
+    
+    public static ArrayList<Payroll> getEmployeePayrollRecords(int employeeID) {
+        payrollRecords.clear();
+                
+        EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
+        String qString = "SELECT pr FROM Payroll pr" +
+                       " WHERE pr.employeeID = :empID";
+
+        TypedQuery<Payroll> q = em.createQuery(qString, Payroll.class);
+        q.setParameter("empID", employeeID);
+	
+	List<Payroll> pRoll;
+	try{
+            pRoll = q.getResultList();
+            payrollRecords = new ArrayList(pRoll);
+	} finally {em.close();}
+
+	return payrollRecords;
     }
 }

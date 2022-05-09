@@ -1,6 +1,7 @@
 package servlets;
 
 import database.PayrollDA;
+import database.UserRoleDA;
 import domain.*;
 
 import java.util.*;
@@ -24,6 +25,7 @@ public class TimecardServlet extends HttpServlet {
         int id;
         
         HttpSession session = request.getSession();
+        Employee employee = (Employee)session.getAttribute("employee");
         PayrollSystem.initialize();
         
         String url = "/main.jsp";
@@ -40,7 +42,7 @@ public class TimecardServlet extends HttpServlet {
             id = Integer.parseInt(idString);
             Timecard timecard = Timecard.find(id);
             timecard.delete();
-            Employee employee = (Employee)session.getAttribute("employee");
+            //Employee employee = (Employee)session.getAttribute("employee");
             id = employee.getEmployeeID();
             ArrayList timecards = Timecard.getEmployeeTimecards(id);
             session.setAttribute("timecards", timecards);
@@ -48,7 +50,7 @@ public class TimecardServlet extends HttpServlet {
         }
         
         if (option.equals("list")){
-            Employee employee = (Employee)session.getAttribute("employee");
+            //Employee employee = (Employee)session.getAttribute("employee");
             id = employee.getEmployeeID();
 
             if(employee.getClass().getSimpleName().equals("HourlyEmployee")) {
@@ -58,16 +60,22 @@ public class TimecardServlet extends HttpServlet {
             }
             
             else {
-                System.out.println("Salaried employeee");
+                System.out.println("Salaried employee");
                 String message = "There are no timecards for salaried employees";
                 session.setAttribute("message", message);
             }
         }
         
+        if (option.equals("listAll")) {
+            ArrayList timecards = Timecard.getAllTimecards();
+            session.setAttribute("timecards", timecards);
+            url = "/timecardList.jsp";
+        }
+        
         if (option.equals("save")){
             Timecard timecard = (Timecard)session.getAttribute("timecard");
             
-            Employee employee = (Employee)session.getAttribute("employee");
+            //Employee employee = (Employee)session.getAttribute("employee");
             id = employee.getEmployeeID();
             
             String dateString = request.getParameter("date");
@@ -123,6 +131,32 @@ public class TimecardServlet extends HttpServlet {
             ArrayList<Payroll> payrollRecords = PayrollDA.getPayrollRecords(date);
             session.setAttribute("payrollRecords", payrollRecords);
             url = "/payroll.jsp";
+        }
+        
+        if (option.equals("ownPayroll")) {
+            //Employee employee = (Employee)session.getAttribute("employee");
+            id = employee.getEmployeeID();
+            ArrayList<Payroll> empPayrollRecords = PayrollDA.getEmployeePayrollRecords(id);
+            session.setAttribute("empPayrollRecords", empPayrollRecords);
+            url = "/ownpayroll.jsp";
+        }
+        
+        if (option.equals("userRoles")) {
+            ArrayList<UserRole> allRoles = UserRoleDA.getAllRoles();
+            session.setAttribute("allRoles", allRoles);
+            url = "/userroles.jsp";
+        }
+        
+        if (option.equals("addUserRole")) {
+            url = "/newrole.jsp";
+        }
+        
+        if (option.equals("updateUserRole")) {
+            url = "/userroles.jsp";
+        }
+        
+        if (option.equals("deleteUserRole")) {
+            url = "/userroles.jsp";
         }
         
         getServletContext()

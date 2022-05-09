@@ -4,6 +4,26 @@ drop table Salary_Employee;
 drop table Timecard;
 drop table Withholding_Type;
 drop table Payroll;
+drop table UserRole;
+
+CREATE TABLE UserRole (
+ Role_ID INT NOT NULL GENERATED ALWAYS AS IDENTITY,
+ RoleDescription VARCHAR(50),
+ AllTC BOOLEAN,
+ AllRoles BOOLEAN,
+ CalculatePayroll BOOLEAN,
+ OwnTC BOOLEAN,
+ OwnPayroll BOOLEAN,
+
+ PRIMARY KEY(Role_ID)
+);
+
+INSERT INTO UserRole
+  (RoleDescription, AllTC, AllRoles, CalculatePayroll, OwnTC, OwnPayroll)
+VALUES
+  ('Admin', TRUE, TRUE, TRUE, TRUE, TRUE),
+  ('Mgt', TRUE, FALSE, TRUE, TRUE, TRUE),
+  ('Employee', FALSE, FALSE, FALSE, TRUE, TRUE);
 
 CREATE TABLE Employee (
   Employee_ID INT NOT NULL,
@@ -13,17 +33,20 @@ CREATE TABLE Employee (
   SSN BIGINT,
   User_ID VARCHAR(20),
   Password VARCHAR(20),
+  UserRole INT,
   
   PRIMARY KEY(Employee_ID) 
 );
 
 INSERT INTO Employee 
-  (Employee_ID, Employee_Type, First_Name, Last_Name, SSN, User_ID, Password)
+  (Employee_ID, Employee_Type, First_Name, Last_Name, SSN, User_ID, Password, UserRole)
 VALUES 
-  (1001, 1, 'Bob', 'Smith', 555121234, 'User1', 'user1'),
-  (1002, 1, 'Jane', 'Doe', 555124321, 'User2', 'user2'),
-  (1003, 2, 'John', 'Doe', 333125678, 'User3', 'user3'),
-  (1004, 2, 'James', 'Wilson', 444342345, 'User4', 'user4');
+  (1001, 1, 'Bob', 'Smith', 555121234, 'User1', 'user1', 3),
+  (1002, 1, 'Jane', 'Doe', 555124321, 'User2', 'user2', 3),
+  (1003, 2, 'John', 'Doe', 333125678, 'User3', 'user3', 3),
+  (1004, 2, 'James', 'Wilson', 444342345, 'User4', 'user4', 3),
+  (1005, 2, 'Administrator', null, null, 'Admin', 'admin', 1),
+  (1006, 2, 'Management', null, null, 'Mgt1', 'mgt1', 2);
 
 CREATE TABLE Hourly_Employee (
   Employee_ID INT NOT NULL,
@@ -46,7 +69,9 @@ INSERT INTO Salary_Employee
   (Employee_ID, Salary)
 VALUES
   (1003, 55000),
-  (1004, 60000);
+  (1004, 60000),
+  (1005, 80000),
+  (1006, 70000);
 
 --generated always as identity automatically assigns value to Timecard_ID
 CREATE TABLE Timecard (

@@ -20,6 +20,7 @@
             <input type="text" name="overtime" value="${timecard.overtimeHoursFormatted}">
             <br>
             <label>&nbsp;</label>
+            <form action="timecardList.jsp">
             <input type="submit" value="Save" class="margin_left">
         </form>
             <label>&nbsp;</label>

@@ -92,6 +92,25 @@ public class TimecardDA {
         return employeeTimecards;
     }
     
+    public static ArrayList<Timecard> getAllTimecards() {
+        employeeTimecards.clear();
+        
+        EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
+        String qString = "SELECT tc FROM Timecard tc";
+        
+        TypedQuery<Timecard> q = em.createQuery(qString, Timecard.class);
+        
+        List<Timecard> allTimecards;
+        try {
+            allTimecards = q.getResultList();
+            employeeTimecards = new ArrayList(allTimecards);
+        } finally {
+            em.close();
+        }
+        
+        return employeeTimecards;
+    }
+    
     public static void update(Timecard tc) {
         EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
         EntityTransaction transact = em.getTransaction();

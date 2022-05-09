@@ -1,8 +1,9 @@
 package servlets;
 
-import database.PayrollSystemDA;
+import database.UserRoleDA;
 import domain.Employee;
 import domain.PayrollSystem;
+import domain.UserRole;
 import exceptions.LoginException;
 
 import java.io.IOException;
@@ -26,8 +27,12 @@ public class LoginServlet extends HttpServlet {
         String message = "";
                 
         Employee employee = null;
+        UserRole userRole = null;
+        
         try{
             employee = PayrollSystem.login(userID, password);
+            userRole = UserRoleDA.findByRole(employee.getUserRole());
+            System.out.println(userRole);
         }
         
         catch(LoginException e){
@@ -38,6 +43,7 @@ public class LoginServlet extends HttpServlet {
         finally{
             request.setAttribute("message", message);
             session.setAttribute("employee", employee);
+            session.setAttribute("userRole", userRole);
             getServletContext().getRequestDispatcher(url).forward(request, response);
         }
     }
