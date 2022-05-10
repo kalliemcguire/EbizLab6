@@ -8,6 +8,16 @@ public class UserRoleDA {
     
     private static ArrayList<UserRole> allRoles = new ArrayList<UserRole>();
     
+    public static UserRole find(int id){
+        UserRole u;
+        EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
+        try {
+            u = em.find(UserRole.class, id);
+            return u;
+        }
+        finally {em.close();}
+    }
+    
     public static void add(UserRole u) {
         EntityManager em = PayrollSystemDA.getEmFactory().createEntityManager();
         EntityTransaction transact = em.getTransaction();

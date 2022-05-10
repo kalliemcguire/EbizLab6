@@ -37,12 +37,16 @@ public class UserRole implements Serializable{
         UserRoleDA.add(this);
     }
     
-    public void delete(){
+    public void delete() {
         UserRoleDA.delete(this);
     }
     
     public void update() {
         UserRoleDA.update(this);
+    }
+    
+    public static UserRole find(int id) {
+        return UserRoleDA.find(id);
     }
 
     public int getUserRoleID() {

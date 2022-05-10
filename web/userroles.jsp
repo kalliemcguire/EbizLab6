@@ -28,22 +28,22 @@
                     <td class="right"><c:out value='${role.viewOwnTimecards}'/></td>
                     <td class="right"><c:out value='${role.viewOwnPayroll}'/></td>
                 <td>
-                    <form action="timecard" method="post">
+                    <form action="newrole.jsp" method="post">
                         <input type="hidden" name="option" value="updateUserRole">
-                        <input type="hidden" name="id" value="${role.userRoleID}">
+                        <input type="hidden" name="roleID" value="${role.userRoleID}">
                         <input type="submit" value="Update">
                         </form>
                     </td>
                     <td>
                         <form action="timecard" method="post">
                         <input type="hidden" name="option" value="deleteUserRole">
-                        <input type="hidden" name="id" value="${role.userRoleID}">
+                        <input type="hidden" name="roleID" value="${role.userRoleID}">
                         <input type="submit" value="Delete">
                         </form>
                     </td>
             </c:forEach>
         </table>
-        <form action="timecard" method="post">
+        <form action="newrole.jsp" method="post">
             <input type="hidden" name="option" value="addUserRole">
             <input type="submit" value="Add User Role">
         </form>

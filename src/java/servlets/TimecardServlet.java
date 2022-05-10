@@ -23,6 +23,7 @@ public class TimecardServlet extends HttpServlet {
         
         String idString;
         int id;
+        String roleIdString;
         
         HttpSession session = request.getSession();
         Employee employee = (Employee)session.getAttribute("employee");
@@ -147,15 +148,66 @@ public class TimecardServlet extends HttpServlet {
             url = "/userroles.jsp";
         }
         
+        //something wrong here or in my jsps making the addUserRole, updateUserRole, and saveUserRole options not work
         if (option.equals("addUserRole")) {
+            UserRole newRole = new UserRole();
+            session.setAttribute("role", newRole);
+            System.out.println(newRole);
+            UserRoleDA.add(newRole);
+            ArrayList<UserRole> allRoles = UserRoleDA.getAllRoles();
+            session.setAttribute("allRoles", allRoles);
             url = "/newrole.jsp";
         }
         
         if (option.equals("updateUserRole")) {
+            idString = request.getParameter("roleID");
+            id = Integer.parseInt(idString);
+            UserRole u = UserRole.find(id);
+            session.setAttribute("userRole", u);
             url = "/userroles.jsp";
         }
         
+        if (option.equals("saveUserRole")) {
+            roleIdString = request.getParameter("roleID");
+            id = Integer.parseInt(roleIdString);
+            UserRole u = UserRole.find(id);
+            System.out.println(u);
+            
+            String descString = request.getParameter("description");
+            String allTC = request.getParameter("alltimecards");
+            String allURoles = request.getParameter("alluserroles");
+            String calcPR = request.getParameter("calculatepayroll");
+            String ownTC = request.getParameter("viewowntimecards");
+            String ownPR = request.getParameter("viewownpayroll");
+            
+            boolean allTimecards = Boolean.parseBoolean(allTC);
+            boolean allUserRoles = Boolean.parseBoolean(allURoles);
+            boolean calculatePayroll = Boolean.parseBoolean(calcPR);
+            boolean viewOwnTimecards = Boolean.parseBoolean(ownTC);
+            boolean viewOwnPayroll = Boolean.parseBoolean(ownPR);
+            
+            u.setDescription(descString);
+            u.setAllTimecards(allTimecards);
+            u.setAllUserRoles(allUserRoles);
+            u.setCalculatePayroll(calculatePayroll);
+            u.setViewOwnTimecards(viewOwnTimecards);
+            u.setViewOwnPayroll(viewOwnPayroll);
+            
+            UserRoleDA.update(u);
+            
+            ArrayList<UserRole> allRoles = UserRoleDA.getAllRoles();
+            session.setAttribute("allRoles", allRoles);
+            url = "/userroles.jsp";
+        }
+        
+        //this is working fine
         if (option.equals("deleteUserRole")) {
+            roleIdString = request.getParameter("roleID");
+            id = Integer.parseInt(roleIdString);
+            UserRole u = UserRole.find(id);
+            u.delete();
+            ArrayList<UserRole> allRoles = UserRoleDA.getAllRoles();
+            session.setAttribute("allRoles", allRoles);
             url = "/userroles.jsp";
         }
         
